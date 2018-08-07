@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+# wget http://doc.ilabt.iminds.be/ilabt-documentation/_downloads/geni-get-info.py
+# chmod +x geni-get-info.py
+pu_dev=$(./geni-get-info.py | grep dev | awk '{print $2}')
+pu_ip=$(./geni-get-info.py | grep 193.190 | cut -d'/' -f1 | awk '{print $1}')
+modprobe 8021q
+vconfig add $pu_dev 28
+ifconfig $pu_dev.28 $pu_ip netmask 255.255.255.192
+route del default && route add default gw 193.190.127.129
